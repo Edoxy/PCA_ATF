@@ -23,7 +23,7 @@ class PCA:
         self._fitted = False
         return
     
-    def fit(self, data: np.array) -> None:
+    def fit(self, data: np.array, svd_decomposition = True) -> None:
         '''
         Function that finds the principal direction
         data: np.array
@@ -32,15 +32,23 @@ class PCA:
         p = data.shape[1]
         self.mean = np.mean(data, axis=0)
         centered_data = data
-        self.U, self.S, Vt = np.linalg.svd(centered_data)
-        self.V = Vt.T
+
         if self._n_components == None:
             self._n_components = np.min(n, p)
         else:
             self._n_components = min(self._n_components, min(n, p))
 
-        self._eig_value = self.S**2 / self._n_components
-        self._eig_vectors = self.V[:, 0:self._n_components]
+        if svd_decomposition:
+            self.U, self.S, Vt = np.linalg.svd(centered_data)
+            self.V = Vt.T
+
+            self._eig_value = self.S**2 / self._n_components
+            self._eig_vectors = self.V[:, 0:self._n_components]
+        else:
+            v, w = np.linalg.eigh(np.matmul(data.T, data))
+            index = np.argsort(np.abs(v))
+            self._eig_value = np.diag(v[index[::-1]])
+            self._eig_vectors = w[:, index[::-1]]
 
         self._fitted = True
         return
