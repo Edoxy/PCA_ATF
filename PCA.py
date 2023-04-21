@@ -27,29 +27,49 @@ class PCA:
         '''
         Function that finds the principal direction
         data: np.array
+        svd_decomposition: bool, If true uses the svd decomposition to find the eighenvectors
         '''
         n = data.shape[0]
         p = data.shape[1]
-        self.mean = np.mean(data, axis=0)
-        centered_data = data
 
+        # calcoliamo il vettore medio e centriamo i dati
+        self.mean = np.mean(data, axis=0)
+        centered_data = data - self.mean
+
+        # Imposta il numero massimo di componenti che potremo ottenere
+        # anche nel caso non fosse stato scelto il paramentro 
         if self._n_components == None:
+            # Imposta il numero massimo di componenti che potremo ottenere
+            # nel caso non fosse stato scelto il paramentro
             self._n_components = np.min(n, p)
         else:
             self._n_components = min(self._n_components, min(n, p))
 
+        # calcolo delle componenti principali
         if svd_decomposition:
+            ## SVD
             self.U, self.S, Vt = np.linalg.svd(centered_data)
             self.V = Vt.T
 
             self._eig_value = self.S**2 / self._n_components
             self._eig_vectors = self.V[:, 0:self._n_components]
-        else:
-            v, w = np.linalg.eigh(np.matmul(data.T, data))
-            index = np.argsort(np.abs(v))
-            self._eig_value = np.diag(v[index[::-1]])
-            self._eig_vectors = w[:, index[::-1]]
 
+        else:
+            ## CLASSICO
+            cov = np.matmul(centered_data, centered_data.T)
+            v, w = np.linalg.eigh(cov)
+            v = v[::-1]
+            self._eig_value = (v + 1e-13)/p
+            # print(np.min(v))
+            w = w[:, ::-1]
+            # Calcoliamo gli autovettori della Matrice di covarianza originale
+            w = np.matmul(centered_data.T, w)
+            self._eig_vectors = w[:, 0:self._n_components]
+
+            for i in range(self._n_components):
+                self._eig_vectors[:, i] = -1/(np.sqrt(v[i])) * self._eig_vectors[:, i]
+        
+        # Abilitiamo l'uso delle funzioni di trasformazione
         self._fitted = True
         return
     

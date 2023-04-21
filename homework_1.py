@@ -23,7 +23,7 @@ train = []
 train_label = []
 test = []
 test_label = []
-n_test = 4
+n_test = 1
 
 print('Number of images used for testing for each person: ', n_test)
 
@@ -47,7 +47,7 @@ test_label = np.array(test_label)
 # print(train.shape, train_label.shape)
 # print(test.shape, test_label.shape)
 
-components = 30
+components = 39
 print('Number of component used on PCA: ', components)
 
 pca = PCA(n_components=components)
@@ -56,6 +56,9 @@ pca_train = pca.transform(train)
 # print(pca_train.shape)
 img = pca.inverse_transform(pca_train)
 # print(img.shape)
+
+#################################
+# Plot Facce Ricostruite
 
 n_soggetti = 4
 n_foto = 4
@@ -81,7 +84,7 @@ for i in range(test.shape[0]):
 fig2, ax2 = plt.subplots()
 ax2.hist(error, histtype='step', density=True, bins=20)
 
-print(f'Soglia stimata : {np.quantile(error, 0.95):.{2}f}')
+print(f'Soglia stimata : {np.quantile(error, 0.99):.{2}f}')
 
 index = np.zeros((test.shape[0]), dtype=np.int32)
 for i, image in enumerate(pca_test):
@@ -102,4 +105,4 @@ print(f'Precision: {precision:.{2}f}')
 print(f'Recall: {recall:.{2}f}')
 
 #################################
-plt.show()
+# plt.show()
