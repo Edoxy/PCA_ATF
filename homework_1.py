@@ -23,7 +23,7 @@ train = []
 train_label = []
 test = []
 test_label = []
-n_test = 1
+n_test = 3
 
 print('Number of images used for testing for each person: ', n_test)
 
@@ -100,9 +100,9 @@ accuracy = accuracy_score(test_label, index)
 precision = precision_score(test_label, index, average='macro', zero_division=0)
 recall = recall_score(test_label, index, average='macro')
 
-print(f'Accuracy: {accuracy:.{2}f}')
-print(f'Precision: {precision:.{2}f}')
-print(f'Recall: {recall:.{2}f}')
+print(f'Accuracy: {accuracy:.{3}f}')
+print(f'Precision: {precision:.{3}f}')
+print(f'Recall: {recall:.{3}f}')
 
 #################################
 # plt.show()

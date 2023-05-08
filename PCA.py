@@ -59,7 +59,7 @@ class PCA:
             cov = np.matmul(centered_data, centered_data.T)
             v, w = np.linalg.eigh(cov)
             v = v[::-1]
-            self._eig_value = (v + 1e-13)/p
+            self._eig_value = (v + 1e-12)/p
             # print(np.min(v))
             w = w[:, ::-1]
             # Calcoliamo gli autovettori della Matrice di covarianza originale
