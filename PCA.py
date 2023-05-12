@@ -3,7 +3,7 @@ import numpy as np
 Implementaizone della PCA tramite la decomposizione SVD 
 Created on April 2023
 
-author: Edoardo Vay
+author: Edoardo Vay and Alessandro Rossi
 '''
 
 class PCA:

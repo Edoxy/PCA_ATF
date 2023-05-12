@@ -9,7 +9,7 @@ import xlsxwriter as exel
 Homework 1 Analisi Tempo Frequenza
 Created on April 2023
 
-author: Edoardo Vay
+author: Edoardo Vay and Alessandro Rossi
 '''
 
 img_set = np.zeros((64, 64, 10))
